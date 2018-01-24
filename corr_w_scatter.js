@@ -13,7 +13,7 @@ var corrPlot = svg.append("g")
                   .attr("id", "corrPlot")
                   .attr("transform", "translate(" + pad.left + "," + pad.top + ")");
 
-//draw panel for scatter plot     
+//draw panel for scatter plot
 var scatPlot = svg.append("g")
                   .attr("id", "scatPlot")
                   .attr("transform", "translate(" + (pad.left + w + pad.middle) + "," + pad.top + ")")
@@ -58,13 +58,13 @@ var initCorrLabels = function() {
           .attr("text-anchor", "end");
 
   //set position the shuffle order buttons
-  d3.select("#shuffleCorr")
+  /*d3.select("#shuffleCorr")
     .style("left", (pad.left + 10) + "px")
     .style("top", (pad.top + h + 40) + "px");
 
   d3.select("#shuffleDefault")
     .style("left", (pad.left + 10) + "px")
-    .style("top", (pad.top + h + 60) + "px");
+    .style("top", (pad.top + h + 60) + "px");*/
 };
 
 //initialize main and axis titles in the scatter plot
@@ -193,7 +193,7 @@ scatPlot.append("g")
 
 //create a brush for the scatter plot
 var brush = d3.svg.brush().x(scatScales.x).y(scatScales.y);
-//scatPlot.call(brush); //wait to draw brushing until user 
+//scatPlot.call(brush); //wait to draw brushing until user
                         //has reached appropriate instructions
 
 ////////////////////////////////////////////////////
@@ -203,13 +203,13 @@ var brush = d3.svg.brush().x(scatScales.x).y(scatScales.y);
 ////////////////////////////////////////////////////
 
 //used for creating a matrix of correlations
-//that will be bound as data to the cells in the DOM 
+//that will be bound as data to the cells in the DOM
 var corrFormat = function(matrix, vars) {
-  
+
   //iterate through each row and cell in matrix
   matrix.forEach(function(row, i) {
     row.forEach(function(cell, j) {
-      
+
       //change each cell to... -> {value: __, rowVar: __, colVar: __}
       //these cell objects will be bound to the SVG cell elements
       matrix[i][j] = {
@@ -231,9 +231,9 @@ var drawCells = function(data, scales) {
                      .enter()
                      .append("g")
                      .attr("class", "row")
-                     .attr("transform", function(d, i) { 
+                     .attr("transform", function(d, i) {
                         //this will adjust y-position of the row group
-                        return "translate(0," + scales.x( d[0].rowVar ) + ")"; 
+                        return "translate(0," + scales.x( d[0].rowVar ) + ")";
                      });
 
   //append rect SVG elements representing the cells
@@ -246,7 +246,7 @@ var drawCells = function(data, scales) {
                   .attr("width", scales.x.rangeBand())
                   .attr("height", scales.x.rangeBand())
                   .attr("fill", function(d) {return scales.z( d.value );})
-                  .attr("stroke-width", 2);   
+                  .attr("stroke-width", 2);
 };
 
 //used for updating the correlation matrix with data
@@ -295,10 +295,11 @@ var updateCorrLabels = function(pos, name) {
           .text(name.y);
 
   //show the tooltip by turning changing "display"
+  var elem = document.getElementById("plot");
   tooltip = d3.select("#corrTooltip")
               .style("display", "block")
               .style("left", (pos.x + pad.left + 16) + "px")
-              .style("top",  (pos.y + pad.top  - 23) + "px");
+              .style("top",  (pos.y + pad.top  - 23 + elem.getBoundingClientRect().top + window.scrollY) + "px");
 
   //change tooltip text
   tooltip.select(".value")
@@ -337,8 +338,8 @@ var updateCells = function(scales) {
           .selectAll(".row")
           //stagger delay based on final row position
           .delay(function(d) { return tDelayStep * (scales.x(d[0].rowVar)/cellWidth); })
-          .attr("transform", function(d, i) { 
-            return "translate(0," + scales.x( d[0].rowVar ) + ")"; 
+          .attr("transform", function(d, i) {
+            return "translate(0," + scales.x( d[0].rowVar ) + ")";
           })
 
           .selectAll(".cell")
@@ -447,9 +448,9 @@ d3.json(jsonFile, function (data) {
     updateCorrLabels(pos, vars);              //update correlation label text
     updateScatScales(data.minMax, vars);      //update scatter plot scales
     updateScatSVG(vars);                      //update scatter plot points and axes
- 
+
     //make brushing extent invisible
-    scatPlot.select(".extent")                
+    scatPlot.select(".extent")
             .attr("width", 0)
             .attr("height", 0);
   };
@@ -461,7 +462,7 @@ d3.json(jsonFile, function (data) {
     d3.selectAll("text.corr.label").text("");
 
     //if something has been clicked then highlight that cell
-    if (corrCurrentClick) { corrCurrentClick.call(highlightCell); } 
+    if (corrCurrentClick) { corrCurrentClick.call(highlightCell); }
   };
 
   //handler for hovering over a cell
@@ -472,11 +473,11 @@ d3.json(jsonFile, function (data) {
     instrucs.checkUpdateInstrucs(6, function() {
       instrucs.text("");
       //make the shuffle variables button visible
-      d3.select("#shuffleCorr")
+      /*d3.select("#shuffleCorr")
         .style("visibility", "visible")
         .style("opacity", 0)
         .transition().duration(3000)
-        .style("opacity", 1);
+        .style("opacity", 1);*/
     });
 
     //highlight current cell
@@ -488,7 +489,7 @@ d3.json(jsonFile, function (data) {
 
     //update instructions if necessary
     instrucs.checkUpdateInstrucs(3);
-            
+
     //change classes of clicked cell (see also the CSS)
     corrPlot.selectAll(".cell").classed("clicked", false);
     corrCurrentClick = d3.select(this).classed("clicked", true);
@@ -503,7 +504,7 @@ d3.json(jsonFile, function (data) {
     //update the correlation matrix
     corrScales.x.domain(d3.shuffle(data.var.slice(0)));          //change the scale
     updateCells(corrScales);                                     //update the cells
-    d3.select("#shuffleDefault").style("visibility", "visible"); //show the reset button 
+    d3.select("#shuffleDefault").style("visibility", "visible"); //show the reset button
   };
 
   //handler for the shuffle variable reset button
@@ -518,8 +519,8 @@ d3.json(jsonFile, function (data) {
           .on("mouseover", hoverCell)
           .on("mouseout",  corrOutEvent)
           .on("click",     clickCell);
-  d3.select("#shuffleCorr").on("click",    shuffleOrder);
-  d3.select("#shuffleDefault").on("click", shuffleReset);
+  //d3.select("#shuffleCorr").on("click",    shuffleOrder);
+  //d3.select("#shuffleDefault").on("click", shuffleReset);
 
   ////////////////////////////////////////
   //  ADD SCATTER PLOT EVENT HANDLERS  ///
@@ -531,7 +532,7 @@ d3.json(jsonFile, function (data) {
     //change the colors of all the points
     scatPlot.selectAll(".points").style("fill", "grey")
 
-    //point and position of current selection 
+    //point and position of current selection
     var d = this.datum();
     var pos  = { x: +this.attr("cx"), y: +this.attr("cy") };
 
@@ -564,10 +565,11 @@ d3.json(jsonFile, function (data) {
     //display the tooltip
     var id = point.datum().id;
     var pos  = { x: +point.attr("cx"), y: +point.attr("cy") };
+    var elem = document.getElementById("plot")
     d3.select("#scatTooltip")
       .style("display", "block")
       .style("left", (pos.x + pad.left + w + pad.middle + 16) + "px")
-      .style("top",  (pos.y + pad.top - 28)  + "px")
+      .style("top",  (pos.y + pad.top - 28 + elem.getBoundingClientRect().top + window.scrollY)  + "px")
       .select(".value")
       .text(id);
   };
@@ -592,7 +594,14 @@ d3.json(jsonFile, function (data) {
   //add event handlers to the data points
   scatPlot.selectAll(".points")
           .on("mouseover", scatOverEvent)
-          .on("mouseout", scatOutEvent);
+          .on("mouseout", scatOutEvent)
+          .on("click", function(d){
+            console.log('clicked', d);
+            var url = "http://mindcontrol-hbn.herokuapp.com/T1w/sub-" + d.id + "_T1w";
+            console.log('url is', url);
+            var win = window.open(url, '_blank');
+            win.focus();
+          });
 
   ///////////////////////////////////////////////////
   //  ADD SCATTER PLOT - BRUSHING EVENT HANDLERS  ///
@@ -600,7 +609,7 @@ d3.json(jsonFile, function (data) {
 
   //If the brush is moved, update classes of the data points
   function brushmove() {
-              
+
     //helper function for whether a point is outside the brush
     var outBrush = function(d) {
       var e = brush.extent();   //current extent of the brush
@@ -611,7 +620,7 @@ d3.json(jsonFile, function (data) {
 
     //update classes of data points
     //NOTE: the CSS will control the color of these classes
-    scatPlot.selectAll(".points")  
+    scatPlot.selectAll(".points")
             .classed("outsideBrush", outBrush)
             .classed("insideBrush",  inBrush);
 
@@ -620,10 +629,10 @@ d3.json(jsonFile, function (data) {
             .attr("r", radius);
     scatPlot.selectAll(".points.insideBrush")
             .moveToFront()
-            .attr("r", brushRadius); 
+            .attr("r", brushRadius);
   };
 
-  // If no points are inside after the brushend event, 
+  // If no points are inside after the brushend event,
   // reset scatter points' classes and sizes, and hide the extent.
   function brushend() {
     var insideBrush = scatPlot.selectAll(".points.insideBrush");
@@ -632,7 +641,7 @@ d3.json(jsonFile, function (data) {
               .classed("outsideBrush", false)
               .classed("insideBrush", false)
               .attr("r", radius);
-      scatPlot.select(".extent")                
+      scatPlot.select(".extent")
               .attr("width", 0)
               .attr("height", 0);
     } else {
