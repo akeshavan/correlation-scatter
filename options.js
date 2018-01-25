@@ -21,12 +21,16 @@ d3.select(self.frameElement).style("height", (h + pad.top + pad.bottom + 20) + "
 
 //groups and colors for scatter plot
 var groups = ["group1", "group2", "group3", "group4", "group5"];
+//
+var col = ['#dc143c', '#31688e', '#21918c', '#35b779', '#90d743'];
+d3.select("#colorbar").selectAll(".color").data(col).style("background-color", function(d){return d})
+
 var colors = {
-                "group1": "crimson",
-                "group2": "green",
-                "group3": "darkslateblue",
-                "group4": "steelblue",
-                "group5": "red",
+                "group1": col[0],
+                "group2": col[1],
+                "group3": col[2],
+                "group4": col[3],
+                "group5": col[4],
               };
 /*var colors = {
                 "group1": "rgb(50%, 0%, 0%)",
@@ -40,11 +44,11 @@ var scatTransTime = 300;  //time for transitions in the scatter plot
 
 //specify instructions that will be displayed at the bottom of the page
 var elem = document.getElementById("plot").getBoundingClientRect();
-var pos0 = { left: (pad.left)                  + "px",   top: (pad.top + h/2 + elem.top)    + "px" };
-var pos1 = { left: (pad.left)                  + "px",   top: (pad.top + h + 40 + elem.top) + "px" };
-var pos2 = { left: (pad.left + w + pad.middle) + "px",   top: (pad.top + h + 80 + elem.top) + "px" };
-var pos3 = { left: (pad.left)                  + "px",   top: (pad.top + h + 22 + elem.top) + "px" };
-var pos4 = { left: (pad.left+50)               + "px",   top: (pad.top + h + 40 + elem.top) + "px" };
+var pos0 = { left: (pad.left)                  + "px",   top: (pad.top + h/2 + elem.top + 50)    + "px" };
+var pos1 = { left: (pad.left)                  + "px",   top: (pad.top + h + 40 + elem.top + 50) + "px" };
+var pos2 = { left: (pad.left + w + pad.middle) + "px",   top: (pad.top + h + 80 + elem.top + 50) + "px" };
+var pos3 = { left: (pad.left)                  + "px",   top: (pad.top + h + 22 + elem.top + 50) + "px" };
+var pos4 = { left: (pad.left+50)               + "px",   top: (pad.top + h + 40 + elem.top + 50) + "px" };
 var style0 = {color: "black"};
 var style1 = {color: "black", "font-size": "40px"};
 var instrucsDatum = [

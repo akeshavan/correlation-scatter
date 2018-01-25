@@ -299,7 +299,7 @@ var updateCorrLabels = function(pos, name) {
   tooltip = d3.select("#corrTooltip")
               .style("display", "block")
               .style("left", (pos.x + pad.left + 16) + "px")
-              .style("top",  (pos.y + pad.top  - 23 + elem.getBoundingClientRect().top + window.scrollY) + "px");
+              .style("top",  (pos.y + pad.top  - 23 + elem.getBoundingClientRect().top + window.scrollY + 50) + "px");
 
   //change tooltip text
   tooltip.select(".value")
@@ -569,7 +569,7 @@ d3.json(jsonFile, function (data) {
     d3.select("#scatTooltip")
       .style("display", "block")
       .style("left", (pos.x + pad.left + w + pad.middle + 16) + "px")
-      .style("top",  (pos.y + pad.top - 28 + elem.getBoundingClientRect().top + window.scrollY)  + "px")
+      .style("top",  (pos.y + pad.top - 28 + elem.getBoundingClientRect().top + window.scrollY + 50)  + "px")
       .select(".value")
       .text(id);
   };
