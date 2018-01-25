@@ -54,8 +54,9 @@ var initCorrLabels = function() {
   //append row variable text
   corrPlot.append("text")
           .attr("class", "y corr label")
-          .attr("x", -pad.left * 0.1)
-          .attr("text-anchor", "end");
+          .attr("y", 20)//-pad.left * 0.1)
+          .attr("text-anchor", "start")
+          .attr("transform", "rotate(90)");
 
   //set position the shuffle order buttons
   /*d3.select("#shuffleCorr")
@@ -291,7 +292,7 @@ var updateCorrLabels = function(pos, name) {
 
   //update row variable text
   corrPlot.select(".y.corr.label")
-          .attr("y", pos.y)
+          .attr("x", pos.y)
           .text(name.y);
 
   //show the tooltip by turning changing "display"
